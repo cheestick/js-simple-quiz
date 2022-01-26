@@ -98,7 +98,30 @@ function checkAnswer() {
 }
 
 function showResults() {
-  const resultsTemplate = ` <h2 class="title">%title%</h2>
-        <h3 class="summary">%message%</h3>
-        <p class="result">%result%</p>`;
+  let title, message;
+
+  const qNum = questions.length;
+
+  if (score === qNum) {
+    title = "Congrats!";
+    message = "You have 100% right answers! ";
+  } else if ((score * 100) / qNum >= 50) {
+    title = "Good job!";
+    message = "You have more than a half right questions.";
+  } else {
+    title = "Go HOme and Learn!";
+    message = "You have got too low result";
+  }
+
+  let result = `${score} of ${qNum}`;
+
+  const finalMessage = ` <h2 class="title">${title}</h2>
+        <h3 class="summary">${message}</h3>
+        <p class="result">${result}</p>`;
+
+  headerContainer.innerHTML = finalMessage;
+
+  submitBtn.blur();
+  submitBtn.innerText = "Start again";
+  submitBtn.onclick = () => history.go();
 }
