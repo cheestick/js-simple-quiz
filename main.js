@@ -43,6 +43,8 @@ let questionIndex = 0; // current question
 clearPage();
 showQuestion();
 
+submitBtn.onclick = checkAnswer;
+
 // clear html
 function clearPage() {
   headerContainer.innerHTML = "";
@@ -50,16 +52,16 @@ function clearPage() {
 }
 
 function showQuestion() {
+  if (!questions[questionIndex]) return;
   const { question, answers } = questions[questionIndex];
   const titleMarkup = `<h2 class="title">${question}</h2>`;
 
   headerContainer.innerHTML = titleMarkup;
 
-  // answers
-  const answersMarkup = answers.reduce((elementMarkup, answer) => {
+  const answersMarkup = answers.reduce((elementMarkup, answer, index) => {
     elementMarkup += `<li>
 						<label>
-							<input type="radio" class="answer" name="answer" />
+							<input type="radio" class="answer" name="answer" value="${index + 1}"/>
 							<span>${answer}</span>
 							</label>
 						</li>`;
@@ -67,4 +69,36 @@ function showQuestion() {
   }, "");
 
   listContainer.innerHTML = answersMarkup;
+}
+
+function checkAnswer() {
+  const checkedRadio = listContainer.querySelector(
+    'input[type="radio"]:checked'
+  );
+  if (!checkedRadio) {
+    submitBtn.blur();
+    console.log("Choose your answer!");
+    return;
+  }
+
+  const userAnswer = parseInt(checkedRadio.value);
+  const { correct: correctAnswer } = questions[questionIndex];
+  if (userAnswer === correctAnswer) {
+    score += 1;
+  }
+
+  questionIndex += 1;
+  clearPage();
+  showQuestion();
+
+  if (questionIndex === questions.length) {
+    showResults();
+    questionIndex = 0;
+  }
+}
+
+function showResults() {
+  const resultsTemplate = ` <h2 class="title">%title%</h2>
+        <h3 class="summary">%message%</h3>
+        <p class="result">%result%</p>`;
 }
