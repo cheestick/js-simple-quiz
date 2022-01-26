@@ -32,7 +32,6 @@ const questions = [
 ];
 
 // Search elements
-
 const headerContainer = document.querySelector("#header");
 const listContainer = document.querySelector("#list");
 const submitBtn = document.querySelector("#submit");
@@ -42,9 +41,30 @@ let score = 0; // right aswers quantity
 let questionIndex = 0; // current question
 
 clearPage();
+showQuestion();
 
 // clear html
 function clearPage() {
   headerContainer.innerHTML = "";
   listContainer.innerHTML = "";
+}
+
+function showQuestion() {
+  const { question, answers } = questions[questionIndex];
+  const titleMarkup = `<h2 class="title">${question}</h2>`;
+
+  headerContainer.innerHTML = titleMarkup;
+
+  // answers
+  const answersMarkup = answers.reduce((elementMarkup, answer) => {
+    elementMarkup += `<li>
+						<label>
+							<input type="radio" class="answer" name="answer" />
+							<span>${answer}</span>
+							</label>
+						</li>`;
+    return elementMarkup;
+  }, "");
+
+  listContainer.innerHTML = answersMarkup;
 }
